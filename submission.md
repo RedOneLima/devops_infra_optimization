@@ -190,6 +190,18 @@ kylehewittngc@ip-172-31-28-155:~/capstone$ terraform apply
 
 ![image](https://user-images.githubusercontent.com/22536759/175614543-4be90e94-2c72-43f8-aee1-a62628aab940.png)
 
+From this point forward, I've added the following to my local `/etc/hosts` file to make hosts more readable.
+
+```bash
+...
+
+54.226.15.188 master
+54.167.63.97 node1
+34.203.223.52 node2
+
+...
+```
+
 ## Install and Configure Kubernetes
 
 All the needed steps to install kubeadm and start our control plane (master) nodes are in the script `install_k8s.sh`
@@ -235,14 +247,14 @@ Copy to master node
 ```bash
 kylehewittngc@ip-172-31-28-155:~/capstone$ chmod +x install_k8s.sh
 kylehewittngc@ip-172-31-28-155:~/capstone$ scp -p -i myKey.pem install_k8s.sh 
-ubuntu@54.226.15.188:/home/ubuntu
+ubuntu@master:/home/ubuntu
 install_k8s.sh                                                                                                                                                   100% 1106     2.2MB/s   00:00
 ```
 
 Execute the script on the remote system
 
 ```bash
-kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -i myKey.pem ubuntu@54.226.15.188 "./install_k8s.sh"
+kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -i myKey.pem ubuntu@master "./install_k8s.sh"
 
 ...
 
@@ -262,14 +274,14 @@ Within `EC2 > Security Groups > sg-0a5402b40de29840d - allow_ssh2 > Edit inbound
 
 
 ```bash
-kylehewittngc@ip-172-31-28-155:~/capstone$ scp -p -i myKey.pem node.sh ubuntu@34.203.223.52:~
+kylehewittngc@ip-172-31-28-155:~/capstone$ scp -p -i myKey.pem node.sh ubuntu@node2:~
 node.sh                                                 100%  944     1.9MB/s   00:00                                                                                           
 
-kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -t -i myKey.pem ubuntu@34.203.223.52 "./node.sh"
+kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -t -i myKey.pem ubuntu@node2 "./node.sh"
 
 ...
 
-kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -t -i myKey.pem ubuntu@34.203.223.52 "sudo kubeadm join 172.31.16.119:6443 --token e8w6ko.4q91edczl30a6ar5 --discovery-token-ca-cert-hash sha256:1d7f217f7c8dc989b8328546559959298e959584d4fab71828c578b90533abdb"
+kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -t -i myKey.pem ubuntu@node2 "sudo kubeadm join 172.31.16.119:6443 --token e8w6ko.4q91edczl30a6ar5 --discovery-token-ca-cert-hash sha256:1d7f217f7c8dc989b8328546559959298e959584d4fab71828c578b90533abdb"
 
 ...
 
@@ -283,14 +295,14 @@ Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
 
 ```bash
 
-kylehewittngc@ip-172-31-28-155:~/capstone$ scp -p -i myKey.pem node.sh ubuntu@54.167.63.97:~
+kylehewittngc@ip-172-31-28-155:~/capstone$ scp -p -i myKey.pem node.sh ubuntu@node1:~
 node.sh                                                 100%  944     1.9MB/s   00:00                                                                                           
 
-kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -t -i myKey.pem ubuntu@54.167.63.97 "./node.sh"
+kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -t -i myKey.pem ubuntu@node1 "./node.sh"
 
 ...
 
-kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -t -i myKey.pem ubuntu@54.167.63.97 "sudo kubeadm join 172.31.16.119:6443 --token e8w6ko.4q91edczl30a6ar5 --discovery-token-ca-cert-hash sha256:1d7f217f7c8dc989b8328546559959298e959584d4fab71828c578b90533abdb"
+kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -t -i myKey.pem ubuntu@node1 "sudo kubeadm join 172.31.16.119:6443 --token e8w6ko.4q91edczl30a6ar5 --discovery-token-ca-cert-hash sha256:1d7f217f7c8dc989b8328546559959298e959584d4fab71828c578b90533abdb"
 
 ...
 
@@ -303,15 +315,9 @@ Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
 ```
 
 ```bash
-kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -i myKey.pem ubuntu@54.226.15.188 "kubectl get nodes"                                                                                                 NAME                 STATUS     ROLES                  AGE     VERSION
+kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -i myKey.pem ubuntu@master "kubectl get nodes"                                                                                                 NAME                 STATUS     ROLES                  AGE     VERSION
 master.example.com   NotReady   control-plane,master   110m    v1.23.6
 node1.example.com    NotReady   <none>                 8m32s   v1.23.6
 node2.example.com    NotReady   <none>                 74s     v1.23.6
 
-```
-
-```bash
-  "54.226.15.188" -> mater.example.com -> 172.31.16.119
-  "54.167.63.97" -> node1 -> 172.31.20.65
-  "34.203.223.52" -> node2 -> 172.31.28.7
 ```
