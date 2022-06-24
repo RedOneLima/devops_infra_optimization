@@ -254,6 +254,11 @@ master.example.com   NotReady   control-plane,master   3s    v1.23.6
 ```
 
 Now we must set up our worker nodes
+First we must allow TCP traffic within subnet
+
+Within `EC2 > Security Groups > sg-0a5402b40de29840d - allow_ssh2 > Edit inbound rules`
+
+
 
 ```bash
 kylehewittngc@ip-172-31-28-155:~/capstone$ scp -p -i myKey.pem node.sh ubuntu@34.203.223.52:~
