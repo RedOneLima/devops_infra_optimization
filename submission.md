@@ -258,7 +258,7 @@ First we must allow TCP traffic within subnet
 
 Within `EC2 > Security Groups > sg-0a5402b40de29840d - allow_ssh2 > Edit inbound rules`
 
-![image](https://user-images.githubusercontent.com/22536759/175665221-01f8192c-67fe-444c-84ed-78841ac4a616.png)
+![image](https://user-images.githubusercontent.com/22536759/175665329-0fd9af0c-a974-4e13-9b91-854f8bf74ec5.png)
 
 
 ```bash
