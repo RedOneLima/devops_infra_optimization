@@ -1,9 +1,10 @@
 resource "aws_instance" "ubuntu" {
   ami           = "ami-052efd3df9dad4825"
   count	= 3
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   key_name      = "${aws_key_pair.generated_key.key_name}"
   vpc_security_group_ids = [aws_security_group.ab_sg.id]
+  subnet_id="subnet-0ca3b7994c3ca3831"
   tags = {
     Name        = "terraform_instance"
   }
