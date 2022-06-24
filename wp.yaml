@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: wp
+  name: wp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: wp
+    spec:
+      containers:
+      - image: docker.io/wordpress
+        name: wordpress
+        env:
+        - name:  WORDPRESS_DB_HOST
+          value: mydb
+        - name: WORDPRESS_DB_USER
+          value: root
+        - name: WORDPRESS_DB_NAME
+          value: simplilearn
+        - name: WORDPRESS_DB_PASSWORD
+          value: centos
