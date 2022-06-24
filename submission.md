@@ -321,3 +321,12 @@ node1.example.com    NotReady   <none>                 8m32s   v1.23.6
 node2.example.com    NotReady   <none>                 74s     v1.23.6
 
 ```
+
+
+Setting up the overlay network 
+
+```bash
+kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -i myKey.pem ubuntu@master
+ubuntu@node1:~$ kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
+
