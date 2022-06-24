@@ -84,6 +84,12 @@ kylehewittngc@ip-172-31-28-155:~/capstone$ ls -a
 .  ..  .terraform  .terraform.lock.hcl  aws.tf
 ```
 
+Obtain VPC ID `vpc-056bd3280605a4938`
+
+![image](https://user-images.githubusercontent.com/22536759/175606094-4e0c1aa6-d496-4d33-879b-c6ebce946897.png)
+
+
+
 Create main.tf that will define your resources
 ```bash
 cat main.tf
@@ -115,3 +121,39 @@ provisioner "local-exec" { # Create "myKey.pem" to your computer!!
   }
 }
 ```
+
+Validate and deploy EC2 Instance
+
+```bash
+kylehewittngc@ip-172-31-28-155:~/capstone$ terraform plan
+
+...
+
+kylehewittngc@ip-172-31-28-155:~/capstone$ terraform deploy
+
+...
+
+aws_instance.rhel: Creation complete after 42s [id=i-0c95e1e36e5107a67]
+
+Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+myEC2IP = "54.83.74.19"
+
+```
+
+We can test this by ssh to the new EC2 instance (make sure to change the permission of the key)
+
+```bash
+kylehewittngc@ip-172-31-28-155:~/capstone$ chmod 600 myKey.pem
+kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -i myKey.pem ec2-user@54.83.74.19
+[ec2-user@ip-172-31-87-55 ~]$ whoami && hostname
+ec2-user
+ip-172-31-87-55.ec2.internal
+```
+
+We can check the status from the AWS console 
+
+![image](https://user-images.githubusercontent.com/22536759/175610219-c2f12df6-405f-4387-bc03-bbbbce182e31.png)
+
