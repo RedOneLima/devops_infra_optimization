@@ -528,3 +528,32 @@ weave-net-2k5kl                              2/2     Running   2 (42m ago)     6
 weave-net-68qm9                              2/2     Running   0               62m
 weave-net-pl9j2                              2/2     Running   2 (42m ago)     62m
 ```
+
+
+## Create Load balancer
+
+![image](https://user-images.githubusercontent.com/22536759/175720011-962f9b7c-745e-433e-b359-4a2af3ba670a.png)
+
+![image](https://user-images.githubusercontent.com/22536759/175720346-b29e7c59-783a-49e9-9cf6-3d093b9f5a8c.png)
+
+![image](https://user-images.githubusercontent.com/22536759/175720057-48731164-ac34-4e52-8458-1bd2d6482203.png)
+
+![image](https://user-images.githubusercontent.com/22536759/175720095-a2d92160-0243-43d3-937e-63ab294dba32.png)
+
+![image](https://user-images.githubusercontent.com/22536759/175720569-8fa028fd-5a34-402a-b257-42d9134d72bd.png)
+
+![image](https://user-images.githubusercontent.com/22536759/175720107-1410d87d-9dc2-4b9b-845a-6c7411d49c66.png)
+
+![image](https://user-images.githubusercontent.com/22536759/175720509-a5214792-623e-49d0-8135-12b127b5b625.png)
+
+![image](https://user-images.githubusercontent.com/22536759/175720521-c9077eb4-8e36-44d9-8c4c-23857776c482.png)
+
+![image](https://user-images.githubusercontent.com/22536759/175720541-22bb7ddd-b048-405b-99c7-927e6f7ae183.png)
+
+![image](https://user-images.githubusercontent.com/22536759/175720593-509acd87-71d1-471c-80f6-dc6558e4f5fe.png)
+
+![image](https://user-images.githubusercontent.com/22536759/175720611-3cbe94b9-e859-4e48-9753-4fe2cc0b2784.png)
+
+
+
+
