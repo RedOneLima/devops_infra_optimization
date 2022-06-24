@@ -546,7 +546,7 @@ ubuntu@master:~$ kubectl apply -f hpa.yaml
 
 ubuntu@master:~$ kubectl get horizontalpodautoscaler
 NAME         REFERENCE       TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
-php-apache   Deployment/wp   4%/50%   1         10        1          23s
+php-apache   Deployment/wp   0%/50%   1         10        1          23s
 
 ```
 
