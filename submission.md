@@ -342,6 +342,15 @@ Setting up the overlay network
 kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -i myKey.pem ubuntu@master
 ubuntu@node1:~$ kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 ```
+```bash
+kylehewittngc@ip-172-31-28-155:~/capstone$ ssh -i myKey.pem ubuntu@master "kubectl get nodes" 
+
+NAME                 STATUS   ROLES                  AGE     VERSION
+master.example.com   Ready    control-plane,master   4h18m   v1.23.6
+node1.example.com    Ready    <none>                 157m    v1.23.6
+node2.example.com    Ready    <none>                 149m    v1.23.6
+```
+
 
 ## Deploy application
 
@@ -435,9 +444,9 @@ ubuntu@master:~$ hostname -I
 
 ubuntu@master:~$ kubectl get nodes -o wide
 NAME                 STATUS     ROLES                  AGE     VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE           KERNEL-VERSION    CONTAINER-RUNTIME
-master.example.com   Ready      control-plane,master   3h18m   v1.23.6   172.31.28.7    <none>        Ubuntu 22.04 LTS   5.15.0-1011-aws   docker://20.10.17
-node1.example.com    Ready      <none>                 96m     v1.23.6   172.31.20.65   <none>        Ubuntu 22.04 LTS   5.15.0-1011-aws   docker://20.10.17
-node2.example.com    NotReady   <none>                 89m     v1.23.6   172.31.28.7    <none>        Ubuntu 22.04 LTS   5.15.0-1011-aws   docker://20.10.17
+master.example.com   Ready    control-plane,master   4h19m   v1.23.6   172.31.16.119   <none>        Ubuntu 22.04 LTS   5.15.0-1011-aws   docker://20.10.17
+node1.example.com    Ready    <none>                 157m    v1.23.6   172.31.20.65    <none>        Ubuntu 22.04 LTS   5.15.0-1011-aws   docker://20.10.17
+node2.example.com    Ready    <none>                 150m    v1.23.6   172.31.28.7     <none>        Ubuntu 22.04 LTS   5.15.0-1011-aws   docker://20.10.17
 
 
 ubuntu@master:~$ export advertise_url="172.31.16.119:2379"
@@ -514,21 +523,32 @@ deployment.apps/metrics-server patched
 ```bash
 ubuntu@master:~$ kubectl get pods -n kube-system
 NAME                                         READY   STATUS    RESTARTS        AGE
-coredns-64897985d-64mpp                      1/1     Running   0               3h47m
-coredns-64897985d-v5z2r                      1/1     Running   0               3h47m
-etcd-master.example.com                      1/1     Running   1 (3h39m ago)   2m12s
-kube-apiserver-master.example.com            1/1     Running   1 (3h39m ago)   2m18s
-kube-controller-manager-master.example.com   1/1     Running   1 (3h39m ago)   2m16s
-kube-proxy-n99wn                             1/1     Running   0               118m
-kube-proxy-p4swz                             1/1     Running   1 (3h39m ago)   3h47m
-kube-proxy-rp9nb                             1/1     Running   0               126m
-kube-scheduler-master.example.com            1/1     Running   1 (3h39m ago)   93s
-metrics-server-77b7f4f884-nhwrl              1/1     Running   0               4m36s
-weave-net-2k5kl                              2/2     Running   2 (42m ago)     62m
-weave-net-68qm9                              2/2     Running   0               62m
-weave-net-pl9j2                              2/2     Running   2 (42m ago)     62m
+coredns-64897985d-64mpp                      1/1     Running   0               4h22m
+coredns-64897985d-v5z2r                      1/1     Running   0               4h22m
+etcd-master.example.com                      1/1     Running   1 (4h14m ago)   37m
+kube-apiserver-master.example.com            1/1     Running   1 (4h14m ago)   37m
+kube-controller-manager-master.example.com   1/1     Running   1 (4h14m ago)   37m
+kube-proxy-n99wn                             1/1     Running   0               153m
+kube-proxy-p4swz                             1/1     Running   1 (4h14m ago)   4h22m
+kube-proxy-rp9nb                             1/1     Running   0               161m
+kube-scheduler-master.example.com            1/1     Running   1 (4h14m ago)   36m
+metrics-server-77b7f4f884-g5jl5              1/1     Running   0               57s
+weave-net-2k5kl                              2/2     Running   2 (77m ago)     97m
+weave-net-68qm9                              2/2     Running   0               97m
+weave-net-pl9j2                              2/2     Running   2 (77m ago)     97m
+
 ```
 
+Now that the metrics server is running we can apply out horizonal scaling policy
+
+```bash
+ubuntu@master:~$ kubectl apply -f hpa.yaml
+
+ubuntu@master:~$ kubectl get horizontalpodautoscaler
+NAME         REFERENCE       TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+php-apache   Deployment/wp   4%/50%   1         10        1          23s
+
+```
 
 ## Create Load balancer
 
